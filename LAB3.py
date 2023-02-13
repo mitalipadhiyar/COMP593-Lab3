@@ -50,8 +50,20 @@ def process_sales_data(sales_csv, orders_dir):
         order_file_path = os.path.join(orders_dir, order_file_name)
         
         sheet_name = f'Order {order_id}'
-        order_df.to_excel(order_file_path, sheet_name=sheet_name)
+        writer = pd.ExcelWriter(order_file_path, engine='xlsxwriter')
+        order_df.to_excel(writer, sheet_name=sheet_name)
+        workbook  = writer.book
+        worksheet = writer.sheets[sheet_name]
+        format1 = workbook.add_format({'num_format': '$#,##0.00'}) 
+        worksheet.set_column('B:B',11)
+        worksheet.set_column('G:H',13, format1)
+        worksheet.set_column('D:F',15)
+
+        worksheet.set_column('C:C',13)
+        worksheet.set_column('I:I',10)
+        worksheet.set_column('J:J',30)
         
+        writer.close()
         
 
 
